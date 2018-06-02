@@ -1,6 +1,23 @@
-.nav-item {
-    padding-right: 15px;
+body {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
 }
+
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+     font-size: .875rem;
+    line-height: 1em;
+}
+
+.ui-widget {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+    font-size: .925rem;
+    line-height: 1em;
+}
+
+/*.nav-item {
+    padding-right: 30px;
+}*/
 
 .rounded {
     border-radius: 0.45rem!important;
@@ -10,14 +27,8 @@
     padding: 5px;
 }
 
-
-.archive-bttn-cell {
-    /*border: 1px #0F0 solid;*/
-    /*width: 80px;*/
-}
-
-#archive_bttn {
-    display: none;
+#jobs_table tr:hover {
+    cursor: pointer;
 }
 
 th {
@@ -66,4 +77,30 @@ td.desc-cell {
 */
 #new_task_form_dialog {
     display: none;
+}
+
+.date-entered {
+    font-size: .8em;
+    padding-bottom: 5px;
+}
+
+#new_job_bttn {
+    margin-top: 15px;
+}
+
+
+
+/*
+ CUSTOMER FORM STYLES
+*/
+#customer_form_dialog {
+    display: none;
+}
+
+.card {
+    width: 44.5rem;
+}
+
+.card  a.btn {
+    color: #fff;
 }

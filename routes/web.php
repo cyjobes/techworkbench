@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/*
+Route::get('/tasks', function () {
+    return view('tasks.task-page');
+});*/
+
+Route::get("/tasks", "TasksController@tasks");
+
+Route::post("/tasks", "TasksController@forms_process");

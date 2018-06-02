@@ -1,46 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+@extends("tech-workbench-layout")
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="/js/jquery-ui-1.12.1.redmond/jquery-ui.css"/>
-    <link rel="stylesheet" href="/css/app.css"/>
+<?php
+        if (isset($data)) {
+    //dd($data);
+        }
+?>
 
-    <title>Tech Workbench Tasks</title>
+@section('content')
+<header>
+    <h1>Tech Workbench Task Board</h1>
+</header>
 
-    <script src="/js/jquery-ui-1.12.1.redmond/external/jquery/jquery.js"></script>
-    <script src="/js/jquery-ui-1.12.1.redmond/jquery-ui.js"></script>
-    <script src="/js/app.js"></script>
-</head>
+<ul class="nav nav-tabs">
+    <li id="new_task_bttn" class="nav-item">
+        <a class="nav-link" href="javascript: void(0)">New Job</a>
+    </li>
 
-<body>
-<div class="container">
-    <header>
-        <h1>Tech Workbench Task Board</h1>
-    </header>
+    <li id="active_bttn" class="nav-item active">
+        <a class="nav-link active" href="#"> Active</a>
+    </li>
 
-    <ul class="nav nav-tabs">
-        <li id="new_task_bttn" class="nav-item">
-            <a class="nav-link" href="javascript: void(0)">New Job</a>
-        </li>
+    <li id="archive_bttn" class="nav-item active">
+        <a class="nav-link " href="#">Archived</a>
+    </li>
 
-        <li id="active_bttn" class="nav-item active">
-            <a class="nav-link active" href="#"> Active</a>
-        </li>
+    <li id="customers_bttn" class="nav-item">
+        <a class="nav-link" href="javascript: void(0)">Customers</a>
+    </li>
 
-        <li id="archive_bttn" class="nav-item active">
-            <a class="nav-link " href="#">Archived</a>
-        </li>
-
-        <li id="customers_bttn" class="nav-item">
-            <a class="nav-link" href="javascript: void(0)">Customers</a>
-        </li>
-
-        <li id="logout_bttn" class="nav-item">
-            <a class="nav-link" href="#">Logout</a>
-        </li>
-    </ul>
+    <li id="logout_bttn" class="nav-item">
+        <a class="nav-link" href="#">Logout</a>
+    </li>
+</ul>
 
 
 
@@ -49,44 +40,30 @@
 
 
 
-    <div class="border border-white rounded">
-        <table id="jobs_table" class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="client-cell">CLIENT</th>
-                    <th class="date-cell">DATE</th>
-                    <th class="priority-cell">PRIORITY</th>
-                    <th class="desc-cell">DESCRIPTION</th>
-                    <th class="due-by-cell">DUE BY</th>
-                    <th class="due-on-cell">DUE ON RECEIPT</th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr data-job_id="1">
-                <td class="client-cell">Joe Bloes Auto Shop</td>
-                <td>10/12/18</td>
-                <td>* * * * *</td>
-                <td class="desc-cell">Some sort of work to do on some sort of thing with...</td>
-                <td>ASAP</td>
-                <td>$500.00</td>
-            </tr>
-            <tr data-job_id="2">
-                <td class="client-cell">Joe Bloes Auto Shop</td>
-                <td>10/12/18</td>
-                <td>* *  *</td>
-                <td class="desc-cell">Some sort of work to do on some sort of thing with...</td>
-                <td>ASAP</td>
-                <td>$500.00</td>
-            </tr>
-            </tbody>
-        </table>
+<div class="border border-white rounded">
+    <table id="jobs_table" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="client-cell">CLIENT</th>
+            <th class="date-cell">DATE</th>
+            <th class="priority-cell">PRIORITY</th>
+            <th class="desc-cell">DESCRIPTION</th>
+            <th class="due-by-cell">DUE BY</th>
+            <th class="due-on-cell">DUE ON RECEIPT</th>
+        </tr>
+        </thead>
+        <tbody>
+        @include('tasks.jobs-table-data', ['some' => 'data'])
+        </tbody>
+    </table>
 
-    </div>
+</div>
 </div>
 
 
 <div id="new_task_form_dialog" title="New Task Form">
     <form>
+        {{ csrf_field() }}
         <div class="date-entered">Date entered: 06/01/18</div>
         <!--<div class="form-group">
             <select class="form-control form-control-sm" id="cust_id" id="customer_select">
@@ -155,7 +132,10 @@
             <li><a href="#tabs-2">Customer List</a></li>
         </ul>
         <div id="tabs-1">
-            <p><form>
+            <p><form action="/tasks" method="post" enctype="application/x-www-form-urlencoded" name="customer_form">
+                {{ csrf_field() }}
+                <input type="hidden" name="task_form_type" id="customer" value="customer">
+                <input type="hidden" name="cust_id" id="cust_id" value="0">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" class="form-control form-control-sm" name="name" id="name"/>
@@ -193,31 +173,34 @@
         </div>
         <div id="tabs-2">
 
-            <div class="card">
-                <h5 class="card-header">Joe Shmo's Bath & Body Works</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Contact: Joseph Shmo</h5>
-                    <p class="card-text">Phone: 919.321.3698</p>
-                    <p class="card-text">Address: 1313 Mockingbird Lane, Cary, NC 27511</p>
-                    <p class="card-text">Email: Joseph.Shmo@bbworks.net</p>
-                    <p class="card-text">Type: Bath & Body Works</p>
-                    <a data-job_id="1211" href="javascript: void(0)" class="btn btn-primary btn-sm">Edit</a>
-                </div>
-            </div>
-
-
-            </div>
+            @include('tasks.customer-list-data', ['some' => 'data'])
 
         </div>
+
     </div>
-
-
-
-
-
-
 </div>
 
-</body>
+    @if (isset($data['new_customer'] ))
+        @if($data['new_customer'] === 1)
+            <script>
+                $( "#tabs" ).tabs();
 
-</html>
+                $( "#customer_form_dialog" ).dialog({
+                    autoOpen: false,
+                    width: 800,
+                    maxHeight: 700,
+                    modal: true,
+                    draggable: false,
+                });
+                $( "#customer_form_dialog" ).dialog( "open" );
+                $("#name").val('{{ $data['new_customer_data']->name }}');
+                $("#business_name").val('{{ $data['new_customer_data']->business_name }}');
+                $("#phone").val('{{ $data['new_customer_data']->phone }}');
+                $("#address").val('{{ $data['new_customer_data']->address }}');
+                $("#email").val('{{ $data['new_customer_data']->email }}');
+                $("#type").val('{{ $data['new_customer_data']->type }}');
+                $("#cust_id").val('{{ $data['new_customer_data']->id }}');
+            </script>
+        @endif
+    @endif
+@endsection
