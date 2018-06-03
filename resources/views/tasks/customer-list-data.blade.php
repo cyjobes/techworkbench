@@ -11,7 +11,8 @@
         <p class="card-text">Address: {{ $customer->address }}</p>
         <p class="card-text">Email: {{ $customer->email }}</p>
         <p class="card-text">Type: {{ $customer->type }}</p>
-        <a data-job_id="1211" href="javascript: void(0)" class="btn btn-primary btn-sm">Edit</a>
+        <a data-cust_id="{{ $customer->id }}" href="javascript: void(0)" class="btn btn-primary btn-sm cust_edit_bttn">Edit</a>
+        <a data-cust_id="{{ $customer->id }}" href="javascript: void(0)" class="btn btn-primary btn-sm cust_delete_bttn">Delete</a>
     </div>
 </div>
 @endforeach

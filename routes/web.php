@@ -23,3 +23,11 @@ Route::get('/tasks', function () {
 Route::get("/tasks", "TasksController@tasks");
 
 Route::post("/tasks", "TasksController@forms_process");
+
+
+
+
+
+/* AJAX */
+Route::post("/ajax/get_customer", "TasksController@get_customer");
+Route::post("/ajax/auto_complete_customer", "TasksController@auto_complete_customer");

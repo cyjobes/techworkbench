@@ -62,62 +62,64 @@
 
 
 <div id="new_task_form_dialog" title="New Task Form">
-    <form>
-        {{ csrf_field() }}
-        <div class="date-entered">Date entered: 06/01/18</div>
-        <!--<div class="form-group">
-            <select class="form-control form-control-sm" id="cust_id" id="customer_select">
-                <option value="0">Select Customer</option>
-            </select>
-        </div>-->
+    <div class="ui-widget">
+        <form>
+            {{ csrf_field() }}
+            <div class="date-entered">Date entered: 06/01/18</div>
+            <!--<div class="form-group">
+                <select class="form-control form-control-sm" id="cust_id" id="customer_select">
+                    <option value="0">Select Customer</option>
+                </select>
+            </div>-->
 
-        <div class="form-group">
-            <input type="text" class="form-control form-control-sm" name="customer_text" id="customer_text" placeholder="Customer">
-            <small>Auto-complete. New customer created when none exists in auto-complete</small>
-        </div>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" name="customer_text" id="customer_text" placeholder="Customer">
+                <small>Auto-complete. New customer created when none exists in auto-complete</small>
+            </div>
 
 
 
-        <div class="form-group">
-            <select class="form-control form-control-sm" name="priority_id" id="priority">
-                <option value="0">Select priority</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <select class="form-control form-control-sm" name="priority_id" id="priority">
+                    <option value="0">Select priority</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="title">Job title</label>
-            <input type="text" class="form-control form-control-sm" id="title">
-        </div>
+            <div class="form-group">
+                <label for="title">Job title</label>
+                <input type="text" class="form-control form-control-sm" id="title">
+            </div>
 
-        <div class="form-group">
-            <label for="description">Job description</label>
-            <textarea type="text" class="form-control form-control-sm" id="description"></textarea>
-        </div>
+            <div class="form-group">
+                <label for="description">Job description</label>
+                <textarea type="text" class="form-control form-control-sm" id="description"></textarea>
+            </div>
 
-        <div class="form-group">
-            <label for="due_date">Due date</label>
-            <input type="text" class="form-control form-control-sm" id="due_date">
-        </div>
+            <div class="form-group">
+                <label for="due_date">Due date</label>
+                <input type="text" class="form-control form-control-sm" id="due_date">
+            </div>
 
-        <div class="form-group">
-            <label for="amount_due">Amount due</label>
-            <input type="text" class="form-control form-control-sm" id="amount_due">
-        </div>
+            <div class="form-group">
+                <label for="amount_due">Amount due</label>
+                <input type="text" class="form-control form-control-sm" id="amount_due">
+            </div>
 
-        <div class="form-group">
-            <label for="amount_paid">Amount paid</label>
-            <input type="text" class="form-control form-control-sm" id="amount_paid">
-        </div>
+            <div class="form-group">
+                <label for="amount_paid">Amount paid</label>
+                <input type="text" class="form-control form-control-sm" id="amount_paid">
+            </div>
 
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="signed" id="signed" value="option1">
-            <label class="form-check-label" for="signed"> Signed off</label>
-        </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="signed" id="signed" value="option1">
+                <label class="form-check-label" for="signed"> Signed off</label>
+            </div>
 
-        <br>
+            <br>
 
-        <button type="submit" id="new_job_bttn" class="btn btn-primary">Submit</button>
-    </form>
+            <button type="submit" id="new_job_bttn" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </div>
 
 
@@ -132,7 +134,7 @@
             <li><a href="#tabs-2">Customer List</a></li>
         </ul>
         <div id="tabs-1">
-            <p><form action="/tasks" method="post" enctype="application/x-www-form-urlencoded" name="customer_form">
+            <p><form action="/tasks" method="post" enctype="application/x-www-form-urlencoded" id="customer_form">
                 {{ csrf_field() }}
                 <input type="hidden" name="task_form_type" id="customer" value="customer">
                 <input type="hidden" name="cust_id" id="cust_id" value="0">
