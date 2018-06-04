@@ -1,16 +1,16 @@
-<tr data-job_id="1">
-    <td class="client-cell">Joe Bloes Auto Shop</td>
-    <td>10/12/18</td>
-    <td>* * * * *</td>
-    <td class="desc-cell">Some sort of work to do on some sort of thing with...</td>
-    <td>ASAP</td>
-    <td>$500.00</td>
-</tr>
-<tr data-job_id="2">
-    <td class="client-cell">Joe Bloes Auto Shop</td>
-    <td>10/12/18</td>
-    <td>* *  *</td>
-    <td class="desc-cell">Some sort of work to do on some sort of thing with...</td>
-    <td>ASAP</td>
-    <td>$500.00</td>
-</tr>
+<?php
+if (isset($data)) {
+    //dd($data);
+}
+?>
+
+@foreach($data['jobs'] as $job)
+    <tr data-job_id="{{ $job->id }}">
+        <td class="client-cell">{{ $job->business_name }}</td>
+        <td>{{ $job->created_at }}</td>
+        <td>{{ $job->priority_string }}</td>
+        <td class="desc-cell">{{ $job->description }}</td>
+        <td>{{ $job->due_date }}</td>
+        <td>{{ $job->amount_due }}</td>
+    </tr>
+@endforeach

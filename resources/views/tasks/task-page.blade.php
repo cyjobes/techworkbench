@@ -63,9 +63,13 @@
 
 <div id="new_task_form_dialog" title="New Task Form">
     <div class="ui-widget">
-        <form>
+        <form action="/tasks" method="post" enctype="application/x-www-form-urlencoded" id="job_form">
             {{ csrf_field() }}
-            <div class="date-entered">Date entered: 06/01/18</div>
+            <input type="hidden" name="task_form_type" id="job" value="job">
+            <input type="hidden" id="new_task_cust_id" name="cust_id" value="0" />
+            <input type="hidden" name="job_id" id="job_id" value="0">
+            <input type="hidden" name="delete" id="job_delete" value="0">
+            <div class="date-entered">Date entered: <span id="created_at">{{ date("m/d/Y", strtotime("now")) }}</span></div>
             <!--<div class="form-group">
                 <select class="form-control form-control-sm" id="cust_id" id="customer_select">
                     <option value="0">Select Customer</option>
@@ -82,42 +86,55 @@
             <div class="form-group">
                 <select class="form-control form-control-sm" name="priority_id" id="priority">
                     <option value="0">Select priority</option>
+                    @foreach ($data['priorities'] as $p)
+                        <option value="{{ $p->id }}">{{ $p->name }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="title">Job title</label>
-                <input type="text" class="form-control form-control-sm" id="title">
+                <input type="text" class="form-control form-control-sm" name="title" id="title">
             </div>
 
             <div class="form-group">
                 <label for="description">Job description</label>
-                <textarea type="text" class="form-control form-control-sm" id="description"></textarea>
+                <textarea type="text" class="form-control form-control-sm" id="description" name="description"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="due_date">Due date</label>
-                <input type="text" class="form-control form-control-sm" id="due_date">
+                <input type="text" class="form-control form-control-sm" id="due_date" name="due_date">
             </div>
 
-            <div class="form-group">
-                <label for="amount_due">Amount due</label>
-                <input type="text" class="form-control form-control-sm" id="amount_due">
-            </div>
-
-            <div class="form-group">
-                <label for="amount_paid">Amount paid</label>
-                <input type="text" class="form-control form-control-sm" id="amount_paid">
-            </div>
-
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" name="signed" id="signed" value="option1">
+            <div class="form-group form-check-inline">
+                <input class="form-check-input" type="checkbox" name="signed" id="signed" value="1">
                 <label class="form-check-label" for="signed"> Signed off</label>
             </div>
 
             <br>
 
+            <div class="form-group">
+                <label for="amount_due">Amount due</label>
+                <input type="text" class="form-control form-control-sm" name="amount_due" id="amount_due">
+            </div>
+
+            <div class="form-group">
+                <label for="amount_paid">Amount paid</label>
+                <input type="text" class="form-control form-control-sm" name="amount_paid" id="amount_paid">
+            </div>
+
+            <div class="form-group form-check-inline">
+                <input class="form-check-input" type="checkbox" name="archive" id="archive" value="1">
+                <label class="form-check-label" for="archive"> Archived</label>
+            </div>
+
+            <br>
+
             <button type="submit" id="new_job_bttn" class="btn btn-primary">Submit</button>
+            &nbsp;
+            &nbsp;
+            <button type="button" id="new_job_bttn" class="btn btn-primary">Delete</button>
         </form>
     </div>
 </div>
@@ -138,6 +155,7 @@
                 {{ csrf_field() }}
                 <input type="hidden" name="task_form_type" id="customer" value="customer">
                 <input type="hidden" name="cust_id" id="cust_id" value="0">
+                <input type="hidden" name="delete" id="cust_delete" value="0">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" class="form-control form-control-sm" name="name" id="name"/>
@@ -171,6 +189,9 @@
                 <br>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
+                &nbsp;
+                &nbsp;
+                <input type="reset" id="customer_form_reset" class="btn btn-primary" value="Reset" />
             </form></p>
         </div>
         <div id="tabs-2">

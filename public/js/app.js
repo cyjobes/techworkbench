@@ -12,6 +12,7 @@ $(function() {
 
     $("#customers_bttn").on("click", function() {
         $( "#customer_form_dialog" ).dialog( "open" );
+        $( "#tabs" ).tabs( "option", "active", 0 );
     });
 
 
@@ -24,6 +25,7 @@ $(function() {
         close: function( event, ui ) {
 
         },
+        active: 0,
     });
 
     $( "#tabs" ).tabs({
@@ -53,15 +55,24 @@ $(function() {
 
     $(".cust_edit_bttn").on("click", get_customer);
 
-    $("#cust_delete_bttn").on('click', function () {
-        msg = "You are about to delete a customer"
+    $(".cust_delete_bttn").on('click', function () {
+        msg = "You are about to delete a customer.\n\n";
+        msg += "Once deleted any jobes will be disassociated with this customer\n\n";
+        msg += "This CANNOT be undone!";
+        msg += "Do you wish to continue?";
+        if (!confirm(msg)) {
+            return false;
+        }
+        delete_customer($(this).data("cust_id"));
     });
 
     $("#customer_text").on('keyup', auto_complete_customer);
 
+    $("#customer_form_reset").on("mouseup", reset_customer_form);
 });
 
 var auto_complete_customer_names = new Array();
+var auto_complete_customer_ids = new Array();
 
 /*if ( document.URL.indexOf("jobs01.php") > -1) {
     $("#active_bttn").css("font-weight", "bold");
@@ -78,8 +89,54 @@ function ajax_error(jqXHR, textStatus, errorThrown) {
 }
 
 function open_saved_job() {
-    console.log($(this).data("job_id"));
+    //console.log($(this).data("job_id"));
+    post_data = {
+        id: $(this).data('job_id'),
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/ajax/get_job",
+        data: post_data,
+        success: open_saved_job_result,
+        error: ajax_error,
+        dataType: "json",
+    });
 }
+
+
+function open_saved_job_result(results) {
+    console.log(results);
+    console.log(results.data.priority_id)
+    if (results.success) {
+        if (results.data.business_name) {
+            $( "#customer_text" ).val(results.data.business_name);
+            $("#priority").val(results.data.priority_id);
+            $("#title").val(results.data.title);
+            $("#description").val(results.data.description);
+            $("#due_date").val(results.data.due_date);
+            $("#amount_due").val(results.data.amount_due);
+            $("#amount_paid").val(results.data.amount_paid);
+            if (results.data.signed) {
+                $("#signed").prop("checked", true)
+            }
+            if (results.data.archive) {
+                $("#archive").prop("checked", true)
+            }
+
+
+            $("#created_at").text(results.data.created_at);
+
+            $( "#new_task_form_dialog" ).dialog( "open" );
+        } else {
+            alert("Customer record could not be found.");
+        }
+    } else {
+        alert("There was a problem!\n\n" + results.error);
+    }
+}
+
+
 
 function  get_customer() {
     post_data = {
@@ -124,6 +181,8 @@ function reset_customer_form() {
 
 
 function auto_complete_customer() {
+    $("#new_task_cust_id").val(0);
+
     if ($(this).val().length < 1) {
         return false;
     }
@@ -144,14 +203,48 @@ function auto_complete_customer() {
 
 function auto_complete_customer_result(results) {
     auto_complete_customer_names = new Array();
+    auto_complete_customer_ids = new Array();
+
     if (results.customers.length > 0) {
         for (var i=0; i < results.customers.length; i++) {
-            auto_complete_customer_names[i] = results.customers[i].name;
+            auto_complete_customer_names[i] = results.customers[i].business_name;
+            auto_complete_customer_ids[i] = results.customers[i].id;
         }
     }
+    setTimeout("auto_complete_customer_display()", 200);
+}
 
+
+function auto_complete_customer_display() {
     $( "#customer_text" ).autocomplete({
-        source: auto_complete_customer_names
+        source: auto_complete_customer_names,
+        select: function( event, ui ) {
+            setTimeout("assign_customer_id_to_new_task_cust_id()", 200);
+        },
     });
-    console.log(auto_complete_customer_names);
+}
+
+
+function assign_customer_id_to_new_task_cust_id() {
+    customer_text_value = $("#customer_text").val();
+
+    for (var i=0; i < auto_complete_customer_names.length; i++) {
+        if (auto_complete_customer_names[i] == customer_text_value) {
+            $("#new_task_cust_id").val(auto_complete_customer_ids[i]);
+            break;
+        }
+    }
+    return;
+}
+
+
+function delete_customer(cust_id) {
+    $("#cust_delete").val(cust_id);
+    $("#customer_form").submit();
+}
+
+
+function delete_job(job_id) {
+    $("#job_delete").val(job_id);
+    $("#job_form").submit();
 }
