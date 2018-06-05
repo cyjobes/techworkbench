@@ -56,7 +56,7 @@
         @include('tasks.jobs-table-data', ['some' => 'data'])
         </tbody>
     </table>
-
+    {{ $data['jobs']->links('vendor/pagination/bootstrap-4') }}
 </div>
 </div>
 
@@ -69,7 +69,7 @@
             <input type="hidden" id="new_task_cust_id" name="cust_id" value="0" />
             <input type="hidden" name="job_id" id="job_id" value="0">
             <input type="hidden" name="delete" id="job_delete" value="0">
-            <div class="date-entered">Date entered: <span id="created_at">{{ date("m/d/Y", strtotime("now")) }}</span></div>
+            <div class="date-entered">Date entered: <span id="created_at"></span></div>
             <!--<div class="form-group">
                 <select class="form-control form-control-sm" id="cust_id" id="customer_select">
                     <option value="0">Select Customer</option>

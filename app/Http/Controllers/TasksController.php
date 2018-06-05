@@ -37,9 +37,9 @@ class TasksController extends Controller
     private function build_jobs_data() {
         $jobs = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
-            ->orderby("due_date", "desc")
+            ->orderby("due_date", "asc")
             ->select('jobs.*', 'customers.business_name')
-            ->get();
+            ->paginate(10);
 
         if (count($jobs) > 0) {
             foreach ($jobs as &$job) {

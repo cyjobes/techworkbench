@@ -71,6 +71,10 @@ td.desc-cell {
 }
 
 
+#jobs_table td {
+    text-align: center;
+}
+
 
 /*
  NEW TASK FORM STYLES
@@ -86,6 +90,11 @@ td.desc-cell {
 
 #new_job_bttn {
     margin-top: 15px;
+}
+
+
+.date-entered {
+    display: none;
 }
 
 

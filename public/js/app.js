@@ -23,7 +23,12 @@ $(function() {
         modal: true,
         draggable: false,
         close: function( event, ui ) {
-
+            $("#job_form")[0].reset();
+            $("#new_task_cust_id").val(0);
+            $("#job_id").val(0);
+            $("#job_delete").val(0);
+            $("#created_at").html("");
+            $(".date-entered").css("display", "none");
         },
         active: 0,
     });
@@ -117,6 +122,9 @@ function open_saved_job_result(results) {
             $("#due_date").val(results.data.due_date);
             $("#amount_due").val(results.data.amount_due);
             $("#amount_paid").val(results.data.amount_paid);
+            $("#job_id").val(results.data.id);
+            $("#new_task_cust_id").val(results.data.cust_id);
+
             if (results.data.signed) {
                 $("#signed").prop("checked", true)
             }
@@ -124,8 +132,9 @@ function open_saved_job_result(results) {
                 $("#archive").prop("checked", true)
             }
 
+            $(".date-entered").css("display", "inline-block");
 
-            $("#created_at").text(results.data.created_at);
+            $("#created_at").html(results.data.created_at);
 
             $( "#new_task_form_dialog" ).dialog( "open" );
         } else {
