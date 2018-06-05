@@ -20,6 +20,8 @@ class TasksController extends Controller
 
     public function tasks()
     {
+        session(['sort_by_direction' => 'desc']);
+        session(['sort_by' => 'due_date']);
         $data['jobs'] = $this->build_jobs_data();
 
         $data['customers'] = Customer::orderBy("business_name", 'asc')
@@ -37,8 +39,9 @@ class TasksController extends Controller
     private function build_jobs_data() {
         $jobs = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
-            ->orderby("due_date", "asc")
+            ->orderby(request()->session()->get('sort_by'), request()->session()->get('sort_by_direction'))
             ->select('jobs.*', 'customers.business_name')
+            ->where("jobs.archive", "=", 0)
             ->paginate(10);
 
         if (count($jobs) > 0) {
@@ -295,5 +298,42 @@ class TasksController extends Controller
         }
 
         return json_encode($results);
+    }
+
+
+    public function sort_jobs_list()
+    {
+        try {
+            $results['success'] = true;
+            $this->set_sort_sessions();
+
+            $data['jobs'] = $this->build_jobs_data();
+            $results['data'] = view('tasks.jobs-table-data', ["data" => $data])->render();
+        } catch (Exception $e) {
+            $results['success'] = false;
+            $results['error'] = $e;
+        }
+
+        return json_encode($results);
+    }
+
+
+    private function set_sort_sessions()
+    {
+        // If the same item last sorted is selected, swap the sorting option
+        if (request()->session()->get('sort_by') == request()->sort_by) {
+            switch (request()->session()->get('sort_by_direction')) {
+                case 'asc':
+                    session(['sort_by_direction' => 'desc']);
+                    break;
+
+                case 'desc':
+                    session(['sort_by_direction' => 'asc']);
+                    break;
+            }
+        } else {
+            session(['sort_by' => request()->sort_by]);
+            session(['sort_by_direction' => 'desc']);
+        }
     }
 }

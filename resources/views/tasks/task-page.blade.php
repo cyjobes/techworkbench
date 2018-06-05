@@ -40,24 +40,9 @@
 
 
 
-<div class="border border-white rounded">
-    <table id="jobs_table" class="table table-striped">
-        <thead>
-        <tr>
-            <th class="client-cell">CLIENT</th>
-            <th class="date-cell">DATE</th>
-            <th class="priority-cell">PRIORITY</th>
-            <th class="desc-cell">DESCRIPTION</th>
-            <th class="due-by-cell">DUE BY</th>
-            <th class="due-on-cell">DUE ON RECEIPT</th>
-        </tr>
-        </thead>
-        <tbody>
-        @include('tasks.jobs-table-data', ['some' => 'data'])
-        </tbody>
-    </table>
-    {{ $data['jobs']->links('vendor/pagination/bootstrap-4') }}
-</div>
+<div id="job_listing_table_container" class="border border-white rounded">
+
+        @include('tasks.jobs-table-data')
 </div>
 
 

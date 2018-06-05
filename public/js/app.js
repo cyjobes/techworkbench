@@ -56,7 +56,7 @@ $(function() {
 
     $( "#due_date" ).datepicker();
 
-    $("#jobs_table tr").on("click", open_saved_job);
+    $("#jobs_table tbody tr").on("click", open_saved_job);
 
     $(".cust_edit_bttn").on("click", get_customer);
 
@@ -74,6 +74,8 @@ $(function() {
     $("#customer_text").on('keyup', auto_complete_customer);
 
     $("#customer_form_reset").on("mouseup", reset_customer_form);
+
+    $(".jobs_list_header").on("click", sort_jobs_list);
 });
 
 var auto_complete_customer_names = new Array();
@@ -256,4 +258,33 @@ function delete_customer(cust_id) {
 function delete_job(job_id) {
     $("#job_delete").val(job_id);
     $("#job_form").submit();
+}
+
+
+function sort_jobs_list() {
+    post_data = {
+        sort_by: $(this).data('sort_by'),
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/ajax/sort_jobs_list",
+        data: post_data,
+        success: sort_jobs_list_results,
+        error: ajax_error,
+        dataType: "json",
+    });
+}
+
+function sort_jobs_list_results(results) {
+    if (results.success) {
+        if (results.data) {
+            $( "#job_listing_table_container" ).html(results.data);
+            $(".jobs_list_header").on("click", sort_jobs_list);
+        } else {
+            alert("Customer record could not be found.");
+        }
+    } else {
+        alert("There was a problem!\n\n" + results.error);
+    }
 }

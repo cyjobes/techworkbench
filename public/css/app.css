@@ -27,7 +27,7 @@ body {
     padding: 5px;
 }
 
-#jobs_table tr:hover {
+#jobs_table tbody tr:hover {
     cursor: pointer;
 }
 
@@ -95,6 +95,13 @@ td.desc-cell {
 
 .date-entered {
     display: none;
+}
+
+.ui-autocomplete {
+    max-height: 150px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
 }
 
 

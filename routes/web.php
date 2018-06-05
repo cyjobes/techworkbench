@@ -32,3 +32,4 @@ Route::post("/tasks", "TasksController@forms_process");
 Route::post("/ajax/get_customer", "TasksController@get_customer");
 Route::post("/ajax/auto_complete_customer", "TasksController@auto_complete_customer");
 Route::post("/ajax/get_job", "TasksController@get_job");
+Route::post("/ajax/sort_jobs_list", "TasksController@sort_jobs_list");
