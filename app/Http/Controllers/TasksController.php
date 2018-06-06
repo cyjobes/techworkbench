@@ -128,7 +128,7 @@ class TasksController extends Controller
                 }
                 break;
         }
-        return redirect('tasks');
+        return redirect('/');
     }
 
 
