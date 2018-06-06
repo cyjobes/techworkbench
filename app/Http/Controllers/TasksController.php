@@ -10,7 +10,7 @@ use App\Priorities;
 
 class TasksController extends Controller
 {
-    private $priorities;
+    private $priorities; // Holds priority data
 
     public function __construct()
     {
@@ -18,10 +18,14 @@ class TasksController extends Controller
     }
 
 
+    /**
+     * Builds the index page with default table data for active jobs
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function tasks()
     {
-        session(['sort_by_direction' => 'desc']);
-        session(['sort_by' => 'due_date']);
+        session(['active_page' => '/']);
         $data['jobs'] = $this->build_jobs_data();
 
         $data['customers'] = Customer::orderBy("business_name", 'asc')
@@ -32,16 +36,18 @@ class TasksController extends Controller
 
         $data['data_type'] = 'active';
 
-//dd($data);
-        //return view('tasks/task-page');
         return view('tasks/task-page', ['data' => $data]);
     }
 
 
+    /**
+     * Builds the index page with default table data for archived jobs
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function archived()
     {
-        session(['sort_by_direction' => 'desc']);
-        session(['sort_by' => 'due_date']);
+        session(['active_page' => '/archived']);
         $data['jobs'] = $this->build_jobs_data(1);
 
         $data['customers'] = Customer::orderBy("business_name", 'asc')
@@ -52,12 +58,17 @@ class TasksController extends Controller
 
         $data['data_type'] = 'archived';
 
-//dd($data);
-        //return view('tasks/task-page');
         return view('tasks/task-page', ['data' => $data]);
     }
 
 
+    /**
+     * Gets collection of data for active or archived jobs, joining the jobs and customer tables
+     *
+     * @param int $archived - a value other than zero means that the collection is to be archived records
+     * Otherwise non-archived records are displayed -> default
+     * @return mixed
+     */
     private function build_jobs_data($archived = 0) {
         $jobs = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
@@ -101,6 +112,11 @@ class TasksController extends Controller
     }
 
 
+    /**
+     * Determines which type of action to take and which form process should be called
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function forms_process()
     {
         switch(request()->task_form_type) {
@@ -128,12 +144,13 @@ class TasksController extends Controller
                 }
                 break;
         }
-        return redirect('/');
+        return redirect(request()->session()->get('active_page'));
     }
 
 
-
-
+    /**
+     * Creates a new customer record
+     */
     private function new_customer()
     {
         //dd(request());
@@ -147,6 +164,10 @@ class TasksController extends Controller
         $customer->save();
     }
 
+
+    /**
+     * Updates an existing customer record
+     */
     private function edit_customer()
     {
         $customer = Customer::where("id", "=", request()->cust_id)->first();
@@ -160,6 +181,35 @@ class TasksController extends Controller
     }
 
 
+    /**
+     * Deletes a customer record and updates related jobs records cust_id to 99999999
+     */
+    private function delete_customer()
+    {
+        try {
+            DB::beginTransaction();
+            $jobs = Job::where("cust_id", "=", request()->delete)->get();
+
+            if (count($jobs) > 0) {
+                foreach ($jobs as &$job) {
+                    $job->cust_id = 99999999;
+                    $job->update();
+                }
+            }
+
+            $job = Customer::where("id", "=", request()->delete)->delete();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        DB::commit();
+    }
+
+
+    /** AJAX
+     * Gets a customer record for editing
+     *
+     * @return string
+     */
     public function get_customer()
     {
         //dd( request()->id);
@@ -183,6 +233,11 @@ class TasksController extends Controller
     }
 
 
+    /** AJAX
+     * Gets customer records where the request->term has text that matches a business_name
+     *
+     * @return string
+     */
     public function auto_complete_customer()
     {
         $term = request()->term;
@@ -191,7 +246,10 @@ class TasksController extends Controller
     }
 
 
-
+    /**
+     * Creates a new job record. Will also create a new customer record if the given customer
+     * does not already exist in the customer table
+     */
     private function new_job()
     {
         try {
@@ -230,6 +288,12 @@ class TasksController extends Controller
     }
 
 
+    /**
+     * Part of the new_job() method. Creates a customer record where only the name and business_name fields are populated
+     *
+     * @param null $customer_name
+     * @return mixed|void
+     */
     private function quick_customer_add($customer_name = NULL)
     {
         if ($customer_name === NULL) {
@@ -243,7 +307,9 @@ class TasksController extends Controller
     }
 
 
-
+    /**
+     * Updates a job record
+     */
     private function edit_job()
     {
         $job = Job::where("id", "=", request()->job_id)->first();
@@ -270,27 +336,9 @@ class TasksController extends Controller
     }
 
 
-    private function delete_customer()
-    {
-        try {
-            DB::beginTransaction();
-            $jobs = Job::where("cust_id", "=", request()->delete)->get();
-
-            if (count($jobs) > 0) {
-                foreach ($jobs as &$job) {
-                    $job->cust_id = 0;
-                    $job->update();
-                }
-            }
-
-            $job = Customer::where("id", "=", request()->delete)->delete();
-        } catch (Exception $e) {
-            DB::rollBack();
-        }
-        DB::commit();
-    }
-
-
+    /**
+     * Deletes a job record
+     */
     private function delete_job()
     {
         try {
@@ -303,6 +351,11 @@ class TasksController extends Controller
     }
 
 
+    /** AJAX
+     * Gets a job record for display and editing
+     *
+     * @return string
+     */
     public function get_job() {
         $results['success'] = true;
         try {
@@ -322,7 +375,7 @@ class TasksController extends Controller
         return json_encode($results);
     }
 
-
+/*
     public function sort_jobs_list()
     {
         try {
@@ -357,5 +410,5 @@ class TasksController extends Controller
             session(['sort_by' => request()->sort_by]);
             session(['sort_by_direction' => 'desc']);
         }
-    }
+    }*/
 }
