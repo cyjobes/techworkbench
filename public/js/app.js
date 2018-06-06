@@ -124,8 +124,8 @@ function open_saved_job() {
 
 
 function open_saved_job_result(results) {
-    console.log(results);
-    console.log(results.data.priority_id)
+    //console.log(results);
+    //console.log(results.data.priority_id)
     if (results.success) {
         if (results.data.business_name) {
             $( "#customer_text" ).val(results.data.business_name);
@@ -186,7 +186,7 @@ function get_customer_result(results) {
             $("#email").val(results.customer[0].email);
             $("#type").val(results.customer[0].type);
             $("#cust_id").val(results.customer[0].id);
-            console.log(results.customer);
+            //console.log(results.customer);
         } else {
             alert("Customer record could not be found.");
         }
