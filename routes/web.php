@@ -20,7 +20,8 @@ Route::get('/tasks', function () {
     return view('tasks.task-page');
 });*/
 
-Route::get("/tasks", "TasksController@tasks");
+Route::get("/", "TasksController@tasks");
+Route::get("/archived", "TasksController@archived");
 
 Route::post("/tasks", "TasksController@forms_process");
 

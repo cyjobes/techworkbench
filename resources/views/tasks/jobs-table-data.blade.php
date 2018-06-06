@@ -27,4 +27,3 @@ if (isset($data)) {
 @endforeach
     </tbody>
 </table>
-{{ $data['jobs']->links('vendor/pagination/bootstrap-4') }}

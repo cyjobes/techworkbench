@@ -77,7 +77,16 @@ $(function() {
 
     /*$(".jobs_list_header").on("click", sort_jobs_list);*/
 
-    $('#jobs_table').DataTable();
+    $('#jobs_table').DataTable({
+        "columnDefs": [ {
+            "targets": 3,
+            "orderable": false
+        } ,
+            {
+                "targets": 5,
+                "orderable": false
+            } ]
+    });
 });
 
 var auto_complete_customer_names = new Array();

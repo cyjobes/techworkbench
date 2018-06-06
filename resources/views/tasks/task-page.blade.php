@@ -11,27 +11,47 @@
     <h1>Tech Workbench Task Board</h1>
 </header>
 
+
+@switch($data['data_type'])
+    @case('active')
+        @php
+            $active_class = 'active';
+            $archived_class = '';
+        @endphp
+    @break
+
+    @case('archived')
+        @php
+            $archived_class = 'active';
+            $active_class = '';
+        @endphp
+    @break
+@endswitch
+
+
 <ul class="nav nav-tabs">
     <li id="new_task_bttn" class="nav-item">
         <a class="nav-link" href="javascript: void(0)">New Job</a>
     </li>
 
     <li id="active_bttn" class="nav-item active">
-        <a class="nav-link active" href="#"> Active</a>
+        <a class="nav-link {{ $active_class }}" href="/"> Active</a>
     </li>
 
     <li id="archive_bttn" class="nav-item active">
-        <a class="nav-link " href="#">Archived</a>
+        <a class="nav-link {{ $archived_class }}" href="/archived">Archived</a>
     </li>
 
     <li id="customers_bttn" class="nav-item">
         <a class="nav-link" href="javascript: void(0)">Customers</a>
     </li>
 
-    <li id="logout_bttn" class="nav-item">
+{{--    <li id="logout_bttn" class="nav-item">
         <a class="nav-link" href="#">Logout</a>
-    </li>
+    </li>--}}
 </ul>
+
+
 
 
 

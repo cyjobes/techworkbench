@@ -30,19 +30,41 @@ class TasksController extends Controller
 
         $data['priorities'] = $this->priorities;
 
+        $data['data_type'] = 'active';
+
 //dd($data);
         //return view('tasks/task-page');
         return view('tasks/task-page', ['data' => $data]);
     }
 
 
-    private function build_jobs_data() {
+    public function archived()
+    {
+        session(['sort_by_direction' => 'desc']);
+        session(['sort_by' => 'due_date']);
+        $data['jobs'] = $this->build_jobs_data(1);
+
+        $data['customers'] = Customer::orderBy("business_name", 'asc')
+            ->orderby("name", 'asc')
+            ->get();
+
+        $data['priorities'] = $this->priorities;
+
+        $data['data_type'] = 'archived';
+
+//dd($data);
+        //return view('tasks/task-page');
+        return view('tasks/task-page', ['data' => $data]);
+    }
+
+
+    private function build_jobs_data($archived = 0) {
         $jobs = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
             ->orderby(request()->session()->get('sort_by'), request()->session()->get('sort_by_direction'))
             ->select('jobs.*', 'customers.business_name')
-            ->where("jobs.archive", "=", 0)
-            ->paginate(10);
+            ->where("jobs.archive", "=", $archived)
+            ->get();
 
         if (count($jobs) > 0) {
             foreach ($jobs as &$job) {
