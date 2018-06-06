@@ -75,7 +75,9 @@ $(function() {
 
     $("#customer_form_reset").on("mouseup", reset_customer_form);
 
-    $(".jobs_list_header").on("click", sort_jobs_list);
+    /*$(".jobs_list_header").on("click", sort_jobs_list);*/
+
+    $('#jobs_table').DataTable();
 });
 
 var auto_complete_customer_names = new Array();
