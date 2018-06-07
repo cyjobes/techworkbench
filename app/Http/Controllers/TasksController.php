@@ -72,7 +72,7 @@ class TasksController extends Controller
     private function build_jobs_data($archived = 0) {
         $jobs = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
-            ->orderby(request()->session()->get('sort_by'), request()->session()->get('sort_by_direction'))
+            ->orderby('due_date', 'asc')
             ->select('jobs.*', 'customers.business_name')
             ->where("jobs.archive", "=", $archived)
             ->get();
