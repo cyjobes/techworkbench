@@ -17,6 +17,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Unknown Customer ID
+    |--------------------------------------------------------------------------
+    |
+    | The record ID number of the entry in the customer table that contains
+    | the default text for a blank customer entry. This was created solely for
+    | the Jobs entry that is displayed and no longer has a customer record
+    | tied to it.
+    |
+    */
+
+    'unknown_customer' => 99999999,
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

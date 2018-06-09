@@ -11,10 +11,12 @@ use App\Priorities;
 class TasksController extends Controller
 {
     private $priorities; // Holds priority data
+    public $unknown_customer;
 
     public function __construct()
     {
         $this->priorities = Priorities::orderBy("id", 'asc')->get();
+        $this->unknown_customer = config('app.unknown_customer');
     }
 
 
@@ -30,6 +32,7 @@ class TasksController extends Controller
 
         $data['customers'] = Customer::orderBy("business_name", 'asc')
             ->orderby("name", 'asc')
+            ->where('id', '!=', $this->unknown_customer)
             ->get();
 
         $data['priorities'] = $this->priorities;
@@ -70,7 +73,7 @@ class TasksController extends Controller
      * @return mixed
      */
     private function build_jobs_data($archived = 0) {
-        $jobs = DB::table('jobs')
+        $jobs  = DB::table('jobs')
             ->join("customers", 'jobs.cust_id', 'customers.id')
             ->orderby('due_date', 'asc')
             ->select('jobs.*', 'customers.business_name')
@@ -119,10 +122,12 @@ class TasksController extends Controller
      */
     public function forms_process()
     {
+
+
         switch(request()->task_form_type) {
             case "customer":
                 if (request()->delete) {
-                    $this->delete_customer();
+                    $this->delete_customer($this->unknown_customer);
                 } else {
                     if (request()->cust_id == 0) {
                         $this->new_customer();
@@ -182,9 +187,9 @@ class TasksController extends Controller
 
 
     /**
-     * Deletes a customer record and updates related jobs records cust_id to 99999999
+     * Deletes a customer record and updates related jobs records cust_id to what is sent to it
      */
-    private function delete_customer()
+    private function delete_customer($cust_id)
     {
         try {
             DB::beginTransaction();
@@ -192,7 +197,7 @@ class TasksController extends Controller
 
             if (count($jobs) > 0) {
                 foreach ($jobs as &$job) {
-                    $job->cust_id = 99999999;
+                    $job->cust_id = $cust_id;
                     $job->update();
                 }
             }
