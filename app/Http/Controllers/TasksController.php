@@ -246,7 +246,7 @@ class TasksController extends Controller
     public function auto_complete_customer()
     {
         $term = request()->term;
-        $results['customers'] = Customer::where("business_name", "like", "%$term%")->get();
+        $results['customers'] = Customer::where("name", "like", "%$term%")->get();
         return json_encode($results);
     }
 

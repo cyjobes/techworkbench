@@ -224,12 +224,13 @@ function auto_complete_customer() {
 }
 
 function auto_complete_customer_result(results) {
+    //console.log(results);
     auto_complete_customer_names = new Array();
     auto_complete_customer_ids = new Array();
 
     if (results.customers.length > 0) {
         for (var i=0; i < results.customers.length; i++) {
-            auto_complete_customer_names[i] = results.customers[i].business_name;
+            auto_complete_customer_names[i] = results.customers[i].name;
             auto_complete_customer_ids[i] = results.customers[i].id;
         }
     }
