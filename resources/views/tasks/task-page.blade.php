@@ -81,16 +81,16 @@
                 </select>
             </div>-->
 
-            <div class="form-group">
-                <input type="text" class="form-control form-control-sm" name="customer_text" id="customer_text" placeholder="Customer">
+            <div class="form-group"><span class="required-field">* required</span>
+                <input type="text" class="form-control form-control-sm" name="customer_text" id="customer_text" placeholder="Customer" required />
                 <small>Auto-complete. New customer created when none exists in auto-complete</small>
             </div>
 
 
 
-            <div class="form-group">
-                <select class="form-control form-control-sm" name="priority_id" id="priority">
-                    <option value="0">Select priority</option>
+            <div class="form-group"><span class="required-field">* required</span>
+                <select class="form-control form-control-sm" name="priority_id" id="priority" required>
+                    <option value="">Select priority</option>
                     @foreach ($data['priorities'] as $p)
                         <option value="{{ $p->id }}">{{ $p->name }}</option>
                     @endforeach
@@ -98,8 +98,8 @@
             </div>
 
             <div class="form-group">
-                <label for="title">Job title</label>
-                <input type="text" class="form-control form-control-sm" name="title" id="title">
+                <label for="title">Job title <span class="required-field">* required</span></label>
+                <input type="text" class="form-control form-control-sm" name="title" id="title" required/>
             </div>
 
             <div class="form-group">
@@ -108,8 +108,8 @@
             </div>
 
             <div class="form-group">
-                <label for="due_date">Due date</label>
-                <input type="text" class="form-control form-control-sm" id="due_date" name="due_date">
+                <label for="due_date">Due date <span class="required-field">* required</span></label>
+                <input type="text" class="form-control form-control-sm" id="due_date" name="due_date" required />
             </div>
 
             <div class="form-group form-check-inline">
@@ -162,13 +162,13 @@
                 <input type="hidden" name="cust_id" id="cust_id" value="0">
                 <input type="hidden" name="delete" id="cust_delete" value="0">
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control form-control-sm" name="name" id="name"/>
+                    <label for="name">Name <span class="required-field">* required</span></label>
+                    <input type="text" class="form-control form-control-sm" name="name" id="name" required/>
                 </div>
 
                 <div class="form-group">
-                    <label for="business_name">Business name</label>
-                    <input type="text"  class="form-control form-control-sm" name="business_name" id="business_name"/>
+                    <label for="business_name">Business name <span class="required-field">* required</span></label>
+                    <input type="text"  class="form-control form-control-sm" name="business_name" id="business_name" required/>
                 </div>
 
                 <div class="form-group">

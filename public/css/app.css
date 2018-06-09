@@ -105,6 +105,12 @@ td.desc-cell {
 }
 
 
+.required-field {
+    color: #ff0000;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
 
 /*
  CUSTOMER FORM STYLES

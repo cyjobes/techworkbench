@@ -71,7 +71,6 @@ $(function() {
         delete_customer($(this).data("cust_id"));
     });
 
-    $("#customer_text").on('keyup', auto_complete_customer);
 
     $("#customer_form_reset").on("mouseup", reset_customer_form);
 
@@ -87,7 +86,31 @@ $(function() {
                 "orderable": false
             } ]
     });
+
+
+
+    $( "#customer_text" ).on("keyup", auto_complete_customer);
 });
+
+
+
+
+/*
+*
+*
+*
+*
+*
+*
+* */
+
+
+
+
+
+
+
+
 
 var auto_complete_customer_names = new Array();
 var auto_complete_customer_ids = new Array();
@@ -202,15 +225,17 @@ function reset_customer_form() {
 }
 
 
+
 function auto_complete_customer() {
+    //console.log('auto_complete_customer()');
     $("#new_task_cust_id").val(0);
 
-    if ($(this).val().length < 1) {
+   /* if ($(this).val().length < 2) {
         return false;
-    }
+    }*/
 
         post_data = {
-            term: $(this).val(),
+            term: $("#customer_text").val(),
         };
 
         $.ajax({
@@ -223,18 +248,11 @@ function auto_complete_customer() {
         });
 }
 
-function auto_complete_customer_result(results) {
-    //console.log(results);
-    auto_complete_customer_names = new Array();
-    auto_complete_customer_ids = new Array();
 
-    if (results.customers.length > 0) {
-        for (var i=0; i < results.customers.length; i++) {
-            auto_complete_customer_names[i] = results.customers[i].name;
-            auto_complete_customer_ids[i] = results.customers[i].id;
-        }
-    }
-    setTimeout("auto_complete_customer_display()", 200);
+function auto_complete_customer_result(results) {
+    auto_complete_customer_names = results.customer_names;
+    auto_complete_customer_ids = results.customer_ids;
+    auto_complete_customer_display();
 }
 
 

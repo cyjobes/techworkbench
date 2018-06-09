@@ -129,6 +129,9 @@ class TasksController extends Controller
                 if (request()->delete) {
                     $this->delete_customer($this->unknown_customer);
                 } else {
+
+                    $this->validate_customer();
+
                     if (request()->cust_id == 0) {
                         $this->new_customer();
                     } else {
@@ -150,6 +153,11 @@ class TasksController extends Controller
                 break;
         }
         return redirect(request()->session()->get('active_page'));
+    }
+
+
+    private function validate_customer() {
+
     }
 
 
@@ -245,10 +253,27 @@ class TasksController extends Controller
      */
     public function auto_complete_customer()
     {
+        $results['customer_names'] = array();
+        $results['customer_ids'] = array();
         $term = request()->term;
-        $results['customers'] = Customer::where("name", "like", "%$term%")->get();
+        $customers = Customer::where("business_name", "like", "%$term%")
+        ->orWhere("name", "like", "%$term%")
+            ->get();
+
+        foreach($customers as $c) {
+            $results['customer_names'][] = $c->name;
+            $results['customer_ids'][] = $c->id;
+            $results['customer_names'][] = $c->business_name;
+            $results['customer_ids'][] = $c->id;
+        }
+
         return json_encode($results);
     }
+    /*
+     * return $query->selectRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE) AS relevance_score", [$searchableTerm])
+        ->whereRaw("MATCH ({$columns}) AGAINST (? IN BOOLEAN MODE)", $searchableTerm)
+        ->orderByDesc('relevance_score');
+    */
 
 
     /**
