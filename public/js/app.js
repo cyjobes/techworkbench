@@ -77,6 +77,7 @@ $(function() {
     /*$(".jobs_list_header").on("click", sort_jobs_list);*/
 
     $('#jobs_table').DataTable({
+        "order": [[ 4, "asc" ]],
         "columnDefs": [ {
             "targets": 3,
             "orderable": false
@@ -84,6 +85,10 @@ $(function() {
             {
                 "targets": 5,
                 "orderable": false
+            },
+            {
+                targets: [ 2 ],
+                orderData: [ 2, 4 ]
             } ]
     });
 
