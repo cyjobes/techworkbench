@@ -78,10 +78,11 @@ $(function() {
 
     $('#jobs_table').DataTable({
         "order": [[ 4, "asc" ]],
-        "columnDefs": [ {
-            "targets": 3,
-            "orderable": false
-        } ,
+        "columnDefs": [
+            {
+                "targets": 3,
+                "orderable": false
+            },
             {
                 "targets": 5,
                 "orderable": false
@@ -89,7 +90,8 @@ $(function() {
             {
                 targets: [ 2 ],
                 orderData: [ 2, 4 ]
-            } ]
+            }
+        ]
     });
 
 
